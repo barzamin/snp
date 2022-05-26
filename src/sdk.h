@@ -176,5 +176,3 @@ public:
 	virtual void			OnEdictAllocated(edict_t* edict) = 0;
 	virtual void			OnEdictFreed(const edict_t* edict) = 0;
 };
-
-struct ICvar {};

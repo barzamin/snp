@@ -44,7 +44,3 @@ DLL_EXPORT void* CreateInterface(const char* pName, int* pReturnCode)
 {
 	return CreateInterfaceInternal(pName, pReturnCode);
 }
-
-//// needed for source unpack/2007?
-//DLL_EXPORT ICvar* cvar = nullptr;
-//DLL_EXPORT ICvar* g_pCVar = nullptr;
