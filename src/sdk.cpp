@@ -40,7 +40,7 @@ void* CreateInterfaceInternal(const char* pName, int* pReturnCode)
 	return NULL;
 }
 
-DLL_EXPORT void* CreateInterface(const char* pName, int* pReturnCode)
+DYLIB_EXPORT void* CreateInterface(const char* pName, int* pReturnCode)
 {
 	return CreateInterfaceInternal(pName, pReturnCode);
 }

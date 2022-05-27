@@ -1,5 +1,8 @@
 #pragma once
 
+#include <cmath>
+#include <cstdint>
+
 typedef void* (*CreateInterfaceFn)(const char* pName, int* pReturnCode);
 typedef void* (*InstantiateInterfaceFn)();
 
@@ -175,4 +178,75 @@ public:
 	// added with version 3 of the interface.
 	virtual void			OnEdictAllocated(edict_t* edict) = 0;
 	virtual void			OnEdictFreed(const edict_t* edict) = 0;
+};
+
+// reimplemtning mathlib/vector.h
+struct Vector {
+	float x, y, z; // typedef float vec_t
+	Vector() : x{ 0 }, y{ 0 }, z{ 0 } {}
+	Vector(float x, float y, float z) : x{ x }, y{ y }, z{ z } {}
+
+	float LengthSqr() const {
+		return x * x + y * y + z * z;
+	}
+
+	float Length() const {
+		return std::sqrt(x * x + y * y + z * z);
+	}
+
+	// return true if this vector is (0,0,0) within tolerance
+	bool IsZero(float tolerance = 0.01f) const
+	{
+		return (x > -tolerance && x < tolerance&&
+			y > -tolerance && y < tolerance&&
+			z > -tolerance && z < tolerance);
+	}
+
+	float Dot(const Vector& other) const {
+		return this->x * other.x + this->y * other.y + this->z * other.z;
+	}
+
+	Vector operator*(float scale) const {
+		return { this->x * scale, this->y * scale, this->z * scale };
+	}
+
+	Vector operator/(float divisor) const {
+		// yes, this is *not* the same thing as division when using IEEE float.
+		// however, this is what mathlib/vector.h does...
+		return *this * (1.0f / divisor);
+	}
+
+	Vector operator+(const Vector& other) const {
+		return { this->x + other.x, this->y + other.y, this->z + other.z };
+	}
+
+	Vector operator-(const Vector& other) const {
+		return { this->x - other.x, this->y - other.y, this->z - other.z };
+	}
+
+	Vector operator-() const {
+		return { -this->x, -this->y, -this->z };
+	}
+
+	Vector Cross(const Vector& other) const {
+		return {
+			this->y * other.z - this->z * other.y,
+			this->z * other.x - this->x * other.z,
+			this->x * other.y - this->y * other.x,
+		};
+	}
+
+	Vector Normalized() const {
+		// not technically what source does, but it depends on what vector extensions a source build was targeting anyway
+		return *this / this->Length();
+	}
+};
+
+struct Color {
+	uint8_t r, g, b, a;
+
+	Color()
+		: Color(0, 0, 0) {}
+	Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 0)
+		: r{ r }, g{ g }, b{ b }, a{ a } {}
 };

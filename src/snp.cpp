@@ -1,4 +1,5 @@
 #include "snp.h"
+#include "mem.h"
 
 SNP snp;
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(
@@ -13,6 +14,7 @@ SNP::SNP() {
 
 bool SNP::Load(CreateInterfaceFn interfaceFactory, CreateInterfaceFn gameServerFactory)
 {
+	mem::ModuleHandle::find("materialsystem.dll");
 	return true; // successful startup
 }
 
