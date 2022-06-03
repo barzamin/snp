@@ -1,6 +1,9 @@
 #pragma once
 
 #include "sdk.h"
+#include "dbgcon.h"
+
+#include <memory>
 
 #define SNP_BUILDSTAMP __DATE__ " " __TIME__
 

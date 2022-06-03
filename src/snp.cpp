@@ -1,5 +1,10 @@
 #include "snp.h"
 #include "mem.h"
+#include "interface.h"
+#include "platform.h"
+#include "services.h"
+
+#include <format>
 
 SNP snp;
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(
@@ -14,12 +19,18 @@ SNP::SNP() {
 
 bool SNP::Load(CreateInterfaceFn interfaceFactory, CreateInterfaceFn gameServerFactory)
 {
-	mem::ModuleHandle::find("materialsystem.dll");
+	Services::provide(new DbgCon());
+	Services::get<DbgCon>()->log("booted\n");
+
+	//auto iface_ptr = Interface::ptr_of("vstdlib" DYLIB_EXTENSION, "VEngineCvar004");
+	//this->dbgcon->log(std::format("iface_ptr={}\n", *iface_ptr));
+
 	return true; // successful startup
 }
 
 void SNP::Unload()
 {
+	Services::unload();
 }
 
 void SNP::Pause()

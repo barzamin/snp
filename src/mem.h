@@ -23,5 +23,22 @@ namespace mem {
 
 	public:
 		static std::optional<mem::ModuleHandle> find(const std::string& modname);
+
+		template<typename T = void*>
+		std::optional<T> symbol(const std::string& name) {
+			std::optional<T> sym;
+#ifdef _WIN32
+			void* raw = GetProcAddress(this->handle, name.c_str());
+#endif
+			if (raw != nullptr) {
+				sym = (T)raw;
+			}
+
+			return sym;
+		}
+
+		~ModuleHandle() {
+			// todo dlclose
+		}
 	};
 };
