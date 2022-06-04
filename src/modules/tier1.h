@@ -13,5 +13,5 @@ public:
 	void shutdown() override;
 
 private:
-	std::unique_ptr<Interface> inner;
+	std::unique_ptr<Interface> g_pCVar;
 };

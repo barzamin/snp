@@ -58,7 +58,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;SPDLOG_USE_STD_FORMAT;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
@@ -76,7 +76,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;SPDLOG_USE_STD_FORMAT;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
@@ -92,6 +92,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dbgcon.cpp" />
+    <ClCompile Include="games\hl2_source_unpack.cpp" />
+    <ClCompile Include="games\game.cpp" />
     <ClCompile Include="mem.cpp" />
     <ClCompile Include="modules\tier1.cpp" />
     <ClCompile Include="services.cpp" />
@@ -100,9 +102,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dbgcon.h" />
+    <ClInclude Include="games\game.h" />
+    <ClInclude Include="games\hl2_source_unpack.h" />
+    <ClInclude Include="games\offsets.h" />
     <ClInclude Include="interface.h" />
     <ClInclude Include="mem.h" />
     <ClInclude Include="modules\module.h" />
+    <ClInclude Include="offsets.h" />
     <ClInclude Include="platform.h" />
     <ClInclude Include="services.h" />
     <ClInclude Include="snp.h" />

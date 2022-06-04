@@ -2,8 +2,7 @@
 
 #include <cassert>
 
-#include "dbgcon.h"
-
+class DbgCon;
 
 class Services {
 public:
@@ -17,11 +16,7 @@ public:
 		return s_dbgcon;
 	}
 
-	static void unload() {
-		// explicit management because, yeah, unloading in source is weird.
-
-		if (s_dbgcon) delete s_dbgcon;
-	}
+	static void unload();
 
 private:
 	static DbgCon* s_dbgcon;

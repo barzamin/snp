@@ -17,12 +17,11 @@ std::optional<mem::ModuleHandle> mem::ModuleHandle::find(const std::string& modn
 				continue;
 			}
 
-			auto cur_mod_path = std::string(cur_mod_path_arr);
-			auto idx = cur_mod_path.find_last_of("\\");
-			auto cur_mod_name = cur_mod_path.substr(idx + 1, cur_mod_path.length() - idx); // slice out everything after last path sep
+			auto cur_mod_path = std::filesystem::path(cur_mod_path_arr);
+			auto cur_mod_name = cur_mod_path.filename().string();
 
 			if (cur_mod_name == modname) {
-				return mem::ModuleHandle(cur_mod_name, (uintptr_t)modinfo.lpBaseOfDll, (size_t)modinfo.SizeOfImage, hModules[i]);
+				return mem::ModuleHandle(cur_mod_name, cur_mod_path, (uintptr_t)modinfo.lpBaseOfDll, (size_t)modinfo.SizeOfImage, hModules[i]);
 			}
 		}
 	}

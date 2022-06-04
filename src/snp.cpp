@@ -5,6 +5,8 @@
 #include "services.h"
 
 #include <format>
+#include <memory>
+#include <spdlog/spdlog.h>
 
 SNP snp;
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(
@@ -20,7 +22,11 @@ SNP::SNP() {
 bool SNP::Load(CreateInterfaceFn interfaceFactory, CreateInterfaceFn gameServerFactory)
 {
 	Services::provide(new DbgCon());
-	Services::get<DbgCon>()->log("booted\n");
+	auto sink = std::make_shared<dbgcon_sink_mt>();
+	auto logger = std::make_shared<spdlog::logger>("snp", sink);
+	spdlog::set_default_logger(logger);
+
+	spdlog::info("logger initialized");
 
 	//auto iface_ptr = Interface::ptr_of("vstdlib" DYLIB_EXTENSION, "VEngineCvar004");
 	//this->dbgcon->log(std::format("iface_ptr={}\n", *iface_ptr));

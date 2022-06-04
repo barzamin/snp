@@ -8,7 +8,10 @@
 #endif
 
 bool Tier1::init() {
-	this->inner = std::make_unique<Interface>(Interface::from_mod(MODULEFILE(TIER1_NAME), "VEngineCvar004").value());
+	this->g_pCVar = std::make_unique<Interface>(Interface::from_mod(MODULEFILE(TIER1_NAME), "VEngineCvar004").value());
+
+
+
 	return false;
 }
 

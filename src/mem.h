@@ -8,17 +8,19 @@
 
 #include <string>
 #include <optional>
+#include <filesystem>
 
 namespace mem {
 	class ModuleHandle {
 	public:
 		std::string name;
+		std::filesystem::path path;
 		uintptr_t base;
 		size_t size;
 	private:
 #ifdef _WIN32
 		HMODULE handle;
-		ModuleHandle(std::string name, uintptr_t base, size_t size, HMODULE handle) : name{ name }, base{ base }, size{ size }, handle{ handle } {}
+		ModuleHandle(std::string name, std::filesystem::path path, uintptr_t base, size_t size, HMODULE handle) : name{ name }, path{ path }, base{ base }, size{ size }, handle{ handle } {}
 #endif
 
 	public:

@@ -33,6 +33,12 @@
     <ClCompile Include="modules\tier1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="games\hl2_source_unpack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="games\game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sdk.h">
@@ -60,6 +66,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="modules\tier1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="offsets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="games\game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="games\offsets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="games\hl2_source_unpack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
