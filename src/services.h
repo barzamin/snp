@@ -2,23 +2,28 @@
 
 #include <cassert>
 
+#define SERVICE(type)              \
+	public:                        \
+	static void provide(type* x) { \
+        s_##type = x;               \
+	}                              \
+    template<> static type* get() {\
+		assert(s_##type != nullptr);\
+        return s_##type;            \
+    }                              \
+    private:                       \
+        static type* s_##type;
+
 class DbgCon;
+class Game;
 
 class Services {
 public:
-	static void provide(DbgCon* x) {
-		s_dbgcon = x;
-	}
-
 	template<typename T> static T* get();
-	template<> static DbgCon* get() {
-		assert(s_dbgcon != nullptr);
-		return s_dbgcon;
-	}
-
 	static void unload();
 
-private:
-	static DbgCon* s_dbgcon;
+	SERVICE(DbgCon)
+	SERVICE(Game)
 };
 
+#undef SERVICE

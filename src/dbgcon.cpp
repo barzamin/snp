@@ -16,8 +16,6 @@ DbgCon::DbgCon() {
 	SetConsoleTitleA("snp debug console");
 
 	auto hConWin = GetConsoleWindow();
-	//ShowWindow(hConWin, SW_MAXIMIZE);
-	//ShowWindow(hConWin, SW_SHOWMINNOACTIVE);
 }
 
 DbgCon::~DbgCon() {

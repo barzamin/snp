@@ -1,12 +1,16 @@
 #include "snp.h"
-#include "mem.h"
-#include "interface.h"
-#include "platform.h"
-#include "services.h"
 
 #include <format>
 #include <memory>
 #include <spdlog/spdlog.h>
+
+#include "sdk.h"
+#include "mem.h"
+#include "interface.h"
+#include "platform.h"
+#include "services.h"
+#include "games/game.h"
+#include "modules/tier1.h"
 
 SNP snp;
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(
@@ -25,13 +29,23 @@ bool SNP::Load(CreateInterfaceFn interfaceFactory, CreateInterfaceFn gameServerF
 	auto sink = std::make_shared<dbgcon_sink_mt>();
 	auto logger = std::make_shared<spdlog::logger>("snp", sink);
 	spdlog::set_default_logger(logger);
+	spdlog::set_level(spdlog::level::debug);
 
 	spdlog::info("logger initialized");
 
-	//auto iface_ptr = Interface::ptr_of("vstdlib" DYLIB_EXTENSION, "VEngineCvar004");
-	//this->dbgcon->log(std::format("iface_ptr={}\n", *iface_ptr));
+	auto game = Game::identify();
+	if (game != nullptr) {
+		Services::provide(game);
+		spdlog::info("game: {}", game->name());
 
-	return true; // successful startup
+		spdlog::info("loaded snp (build " SNP_BUILDSTAMP ")");
+
+		auto t1 = Tier1::init();
+
+		return true;
+	}
+
+	return false; // unsuccessful startup; engine will fire Unload
 }
 
 void SNP::Unload()

@@ -3,6 +3,12 @@
 #include <cmath>
 #include <cstdint>
 
+#ifdef _WIN32
+#define __cppabi __thiscall
+#else
+#define __cppabi __attribute__((__cdecl__))
+#endif
+
 typedef void* (*CreateInterfaceFn)(const char* pName, int* pReturnCode);
 typedef void* (*InstantiateInterfaceFn)();
 
@@ -249,4 +255,35 @@ struct Color {
 		: Color(0, 0, 0) {}
 	Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 0)
 		: r{ r }, g{ g }, b{ b }, a{ a } {}
+};
+
+// tier1
+struct ConCommandBase;
+
+using _RegisterConCommand = void(__cppabi*)(void* thisptr, ConCommandBase* pCommandBase);
+using _UnregisterConCommand = void(__cppabi*)(void* thisptr, ConCommandBase* pCommandBase);
+
+struct ConCommandBase {
+	ConCommandBase(const char* name, int flags, const char* helpstr)
+		: m_pNext(nullptr)
+		, m_bRegistered(false)
+		, m_pszName(name)
+		, m_pszHelpString(helpstr)
+		, m_nFlags(flags) {
+	}
+
+	// if we actually put a virtual destructor here, EVERYTHING BREAKS
+	// so put dummy methods instead
+	virtual void _dtor() {};
+#ifndef _WIN32
+	virtual void _dtor1() {};
+#endif
+	virtual bool IsCommand() const { return false; }; // will get overwritten anyway lol
+	// Note: vtable incomplete, but sufficient
+
+	ConCommandBase* m_pNext;      // 4
+	bool m_bRegistered;           // 8
+	const char* m_pszName;        // 12
+	const char* m_pszHelpString;  // 16
+	int m_nFlags;                 // 20
 };

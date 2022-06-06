@@ -4,6 +4,6 @@
 
 struct Offsets {
 	// vstdlib.dll (tier1)
-	ptrdiff_t ICVar_RegisterConCommand;
-	ptrdiff_t ICVar_UnregisterConCommand;
+	size_t ICVar_RegisterConCommand;
+	size_t ICVar_UnregisterConCommand;
 };
