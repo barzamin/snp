@@ -11,6 +11,7 @@
 #include "services.h"
 #include "games/game.h"
 #include "modules/tier1.h"
+#include "convar.h"
 
 SNP snp;
 EXPOSE_SINGLE_INTERFACE_GLOBALVAR(
@@ -40,9 +41,18 @@ bool SNP::Load(CreateInterfaceFn interfaceFactory, CreateInterfaceFn gameServerF
 
 		spdlog::info("loaded snp (build " SNP_BUILDSTAMP ")");
 
-		auto t1 = Tier1::init();
+		auto tier1 = Tier1::init(*game);
+		if (tier1 != nullptr) {
+			spdlog::info("tier1 services initialized");
+			Services::provide(tier1);
 
-		return true;
+			spdlog::info("registering all concommands");
+			CommandWrapper::RegisterAll();
+
+			return true;
+		}
+
+		return false;
 	}
 
 	return false; // unsuccessful startup; engine will fire Unload
@@ -76,6 +86,10 @@ void SNP::ServerActivate(edict_t* pEdictList, int edictCount, int clientMax)
 
 void SNP::GameFrame(bool simulating)
 {
+}
+
+CON_COMMAND(snp_about, "snp_about - prints info about SNP\n") {
+	spdlog::info("snp_about called");
 }
 
 #pragma region "unused callbacks"

@@ -39,6 +39,9 @@
     <ClCompile Include="games\game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="convar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sdk.h">
@@ -78,6 +81,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="games\hl2_source_unpack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="convar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="valve\utl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

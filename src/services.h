@@ -16,14 +16,16 @@
 
 class DbgCon;
 class Game;
+class Tier1;
 
 class Services {
 public:
 	template<typename T> static T* get();
 	static void unload();
 
-	SERVICE(DbgCon)
-	SERVICE(Game)
+	SERVICE(DbgCon);
+	SERVICE(Game);
+	SERVICE(Tier1);
 };
 
 #undef SERVICE

@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <cstdint>
+#include "valve/utl.h"
 
 #ifdef _WIN32
 #define __cppabi __thiscall
@@ -9,6 +10,7 @@
 #define __cppabi __attribute__((__cdecl__))
 #endif
 
+// interface shenanigans for hooking us into the engine
 typedef void* (*CreateInterfaceFn)(const char* pName, int* pReturnCode);
 typedef void* (*InstantiateInterfaceFn)();
 
@@ -257,11 +259,12 @@ struct Color {
 		: r{ r }, g{ g }, b{ b }, a{ a } {}
 };
 
-// tier1
+// -- tier1 --
 struct ConCommandBase;
 
 using _RegisterConCommand = void(__cppabi*)(void* thisptr, ConCommandBase* pCommandBase);
 using _UnregisterConCommand = void(__cppabi*)(void* thisptr, ConCommandBase* pCommandBase);
+using _FindCommandBase = ConCommandBase* (__cppabi*)(void* thisptr, const char* name);
 
 struct ConCommandBase {
 	ConCommandBase(const char* name, int flags, const char* helpstr)
@@ -272,14 +275,10 @@ struct ConCommandBase {
 		, m_nFlags(flags) {
 	}
 
-	// if we actually put a virtual destructor here, EVERYTHING BREAKS
-	// so put dummy methods instead
+	// dummy virtual dtor because real dtor breaks
 	virtual void _dtor() {};
-#ifndef _WIN32
-	virtual void _dtor1() {};
-#endif
 	virtual bool IsCommand() const { return false; }; // will get overwritten anyway lol
-	// Note: vtable incomplete, but sufficient
+	// ignore the rest of the vtable
 
 	ConCommandBase* m_pNext;      // 4
 	bool m_bRegistered;           // 8
@@ -287,3 +286,65 @@ struct ConCommandBase {
 	const char* m_pszHelpString;  // 16
 	int m_nFlags;                 // 20
 };
+
+// command handler callback types
+typedef void (*FnCommandCallbackVoid_t)(void);
+typedef void (*FnCommandCallback_t)(const CCommand& command);
+
+class ICommandCallback
+{
+public:
+	virtual void CommandCallback(const CCommand& command) = 0;
+};
+
+// command completion callback types
+#define COMMAND_COMPLETION_MAXITEMS		64
+#define COMMAND_COMPLETION_ITEM_LENGTH	64
+
+//-----------------------------------------------------------------------------
+// Returns 0 to COMMAND_COMPLETION_MAXITEMS worth of completion strings
+//-----------------------------------------------------------------------------
+typedef int  (*FnCommandCompletionCallback)(const char* partial, char commands[COMMAND_COMPLETION_MAXITEMS][COMMAND_COMPLETION_ITEM_LENGTH]);
+
+class ICommandCompletionCallback
+{
+public:
+	virtual int  CommandCompletionCallback(const char* pPartial, CUtlVector< CUtlString >& commands) = 0;
+};
+
+// command specialization of general concommands
+struct ConCommand : public ConCommandBase {
+	// only implement the most useful ctor
+	ConCommand(
+		const char* pName,
+		FnCommandCallback_t callback,
+		const char* pHelpString = nullptr,
+		int flags = 0,
+		FnCommandCompletionCallback completionFunc = nullptr
+	)
+		: ConCommandBase(pName, flags, pHelpString)
+		, m_fnCommandCallback(callback)
+		, m_fnCompletionCallback(completionFunc)
+		, m_bHasCompletionCallback(completionFunc != nullptr)
+		, m_bUsingNewCommandCallback(true)
+		, m_bUsingCommandCallbackInterface(false)
+	{
+	}
+
+	union {
+		FnCommandCallbackVoid_t m_fnCommandCallbackV1;
+		FnCommandCallback_t m_fnCommandCallback;
+		ICommandCallback* m_pCommandCallback;
+	};
+
+	union {
+		FnCommandCompletionCallback	m_fnCompletionCallback;
+		ICommandCompletionCallback* m_pCommandCompletionCallback;
+	};
+
+	bool m_bHasCompletionCallback : 1;
+	bool m_bUsingNewCommandCallback : 1;
+	bool m_bUsingCommandCallbackInterface : 1;
+};
+
+// variable specialization of general concommands

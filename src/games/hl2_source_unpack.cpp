@@ -11,4 +11,5 @@ const char* HL2SourceUnpack::name() {
 Offsets HL2SourceUnpack::s_offsets = {
 	.ICVar_RegisterConCommand = 6,
 	.ICVar_UnregisterConCommand = 7,
+	.ICVar_FindCommandBase = 10,
 };

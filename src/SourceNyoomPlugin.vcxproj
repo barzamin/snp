@@ -101,8 +101,10 @@
     <ClCompile Include="services.cpp" />
     <ClCompile Include="snp.cpp" />
     <ClCompile Include="sdk.cpp" />
+    <ClCompile Include="convar.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="convar.h" />
     <ClInclude Include="dbgcon.h" />
     <ClInclude Include="games\game.h" />
     <ClInclude Include="games\hl2_source_unpack.h" />
@@ -116,6 +118,7 @@
     <ClInclude Include="snp.h" />
     <ClInclude Include="sdk.h" />
     <ClInclude Include="modules\tier1.h" />
+    <ClInclude Include="valve\utl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
