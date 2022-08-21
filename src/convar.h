@@ -20,8 +20,10 @@ public:
 	static std::vector<CommandWrapper*>& GetList();
 
 	void Register();
+	void Unregister();
 
 	static void RegisterAll();
+	static void UnregisterAll();
 };
 
 //-----------------------------------------------------------------------------

@@ -17,6 +17,7 @@
 class DbgCon;
 class Game;
 class Tier1;
+class Console;
 
 class Services {
 public:
@@ -26,6 +27,7 @@ public:
 	SERVICE(DbgCon);
 	SERVICE(Game);
 	SERVICE(Tier1);
+	SERVICE(Console);
 };
 
 #undef SERVICE

@@ -96,6 +96,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="modules\console.cpp" />
     <ClCompile Include="dbgcon.cpp" />
     <ClCompile Include="games\hl2_source_unpack.cpp" />
     <ClCompile Include="games\game.cpp" />
@@ -112,6 +113,7 @@
     <ClInclude Include="games\game.h" />
     <ClInclude Include="games\hl2_source_unpack.h" />
     <ClInclude Include="games\offsets.h" />
+    <ClInclude Include="modules\console.h" />
     <ClInclude Include="interface.h" />
     <ClInclude Include="mem.h" />
     <ClInclude Include="modules\module.h" />

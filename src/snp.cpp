@@ -11,6 +11,7 @@
 #include "services.h"
 #include "games/game.h"
 #include "modules/tier1.h"
+#include "modules/console.h"
 #include "convar.h"
 
 SNP snp;
@@ -41,18 +42,23 @@ bool SNP::Load(CreateInterfaceFn interfaceFactory, CreateInterfaceFn gameServerF
 
 		spdlog::info("loaded snp (build " SNP_BUILDSTAMP ")");
 
-		auto tier1 = Tier1::init(*game);
-		if (tier1 != nullptr) {
+		try {
+			auto tier1 = new Tier1(*game);
 			spdlog::info("tier1 services initialized");
 			Services::provide(tier1);
+
+			auto console = new Console(*tier1);
+			spdlog::info("console services initialized");
+			Services::provide(console);
 
 			spdlog::info("registering all concommands");
 			CommandWrapper::RegisterAll();
 
-			return true;
+			return true; // succ !
+		} catch ([[maybe_unused]] const ModuleLoadError& e) {
+			spdlog::error("module load error! terminating");
+			return false;
 		}
-
-		return false;
 	}
 
 	return false; // unsuccessful startup; engine will fire Unload
@@ -89,7 +95,9 @@ void SNP::GameFrame(bool simulating)
 }
 
 CON_COMMAND(snp_about, "snp_about - prints info about SNP\n") {
-	spdlog::info("snp_about called");
+	auto info = std::format("snp (build " SNP_BUILDSTAMP ") is loaded and running.\n");
+	spdlog::info(info);
+	Services::get<Console>()->log(info.c_str());
 }
 
 #pragma region "unused callbacks"

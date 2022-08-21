@@ -12,12 +12,11 @@ class Game;
 
 class Tier1 {
 public:
-	static Tier1* init(Game& game);
-	void shutdown();
-
-	Tier1() {}
+	Tier1() = delete;
+	Tier1(Game& game);
 	Tier1(const Tier1&) = delete;
 	Tier1(Tier1&&) = default;
+	void shutdown();
 
 	// checked proxies so we dont call nullptr (and we can hide g_pCVar).
 	// todo: make assert vanish in release, and maybe make a macro for this.
@@ -35,9 +34,9 @@ public:
 	}
 
 	// vtable theft time
-	void* vt_ConCommand;
-
+	void* vt_ConCommand = nullptr;
 private:
+
 	_RegisterConCommand RegisterConCommand_ptr = nullptr;
 	_UnregisterConCommand UnregisterConCommand_ptr = nullptr;
 	_FindCommandBase FindCommandBase_ptr = nullptr;

@@ -28,8 +28,25 @@ void CommandWrapper::Register() {
 	this->registered = true;
 }
 
+void CommandWrapper::Unregister() {
+	if (this->registered) {
+		auto tier1 = Services::get<Tier1>();
+		// registered, so we know our vtable is fine,
+		// but gank again just to be sure :>
+		*(void**)this->inner = tier1->vt_ConCommand;
+		tier1->RegisterConCommand(this->inner);
+	}
+	this->registered = false;
+}
+
 void CommandWrapper::RegisterAll() {
 	for (auto cmd : CommandWrapper::GetList()) {
 		cmd->Register();
+	}
+}
+
+void CommandWrapper::UnregisterAll() {
+	for (auto cmd : CommandWrapper::GetList()) {
+		cmd->Unregister();
 	}
 }
