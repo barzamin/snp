@@ -18,7 +18,7 @@ Console::Console(Tier1& tier1) {
 		throw ModuleLoadError();
 	}
 
-	auto ConColorMsg_ptr = *mod->symbol<_ConColorMsg>(CONCOLORMSG_SYMBOL);
+	auto ConColorMsg_ptr = (* mod).symbol<_ConColorMsg>(CONCOLORMSG_SYMBOL);
 	if (!ConColorMsg_ptr) {
 		spdlog::error("cant find ConColorMsg() in tier1 module");
 		throw new ModuleLoadError();
